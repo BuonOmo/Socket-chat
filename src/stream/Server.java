@@ -20,21 +20,30 @@ public class Server  {
     	  try {
     		BufferedReader socIn = null;
     		ObjectInputStream ois = new ObjectInputStream (clientSocket.getInputStream());
-    		
+    		ObjectOutputStream oos = new ObjectOutputStream (clientSocket.getOutputStream());
     		socIn = new BufferedReader(
     			new InputStreamReader(clientSocket.getInputStream()));    
     		PrintStream socOut = new PrintStream(clientSocket.getOutputStream());
     		while (true) {
     		  RequeteClient rc = (RequeteClient) ois.readObject();
-    		  if (rc.valide)
-    		  {
-    			  socOut.println("type: "+rc.type+"\nuser: "+rc.username+"\nmessage: "+rc.message+"\nother: "+rc.otherUsername);
-    		  }
-    		  else
-    		  {
-    			  socOut.println("non valide");
-    		  }
-    		}
+			  String requete;
+			  switch (rc.type)
+			  {
+			  	case 0 :
+			  		requete = "SIGNIN "+rc.username;
+			  		break;
+			  	case 1 :
+			  		requete = "MESSAGE FROM "+rc.username+" TO "+rc.otherUsername+" CONTENT "+rc.message;
+			  		break;
+			  	case 2 :
+			  		requete = "SIGNOUT "+rc.username;
+			  		break;
+			  	default :
+			  		requete = "ERROR "+rc.errorMessage;
+			  		break;
+			  }
+			  oos.writeObject(new RequeteServeur(requete));
+		}
     	} catch (Exception e) {
         	System.err.println("Error in EchoServer:" + e); 
         }

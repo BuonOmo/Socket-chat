@@ -22,9 +22,8 @@ public class Client {
 
         Socket server = null;
         ObjectOutputStream oos = null;
-        PrintStream socOut = null;
+        ObjectInputStream ois = null;
         BufferedReader stdIn = null;
-        BufferedReader socIn = null;
 
         if (args.length != 2) {
           System.out.println("Usage: java EchoClient <EchoServer host> <EchoServer port>");
@@ -35,10 +34,7 @@ public class Client {
       	    // creation socket ==> connexion
       	    server = new Socket(args[0],new Integer(args[1]).intValue());
       	    oos = new ObjectOutputStream(server.getOutputStream());
-		    socIn = new BufferedReader(
-		    		          new InputStreamReader(server.getInputStream()));
-		    
-		    socOut= new PrintStream(oos);
+      	    ois = new ObjectInputStream(server.getInputStream());
 		    stdIn = new BufferedReader(new InputStreamReader(System.in));
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host:" + args[0]);
@@ -50,15 +46,39 @@ public class Client {
         }
                              
         String line;
+        RequeteClient rc;
+        RequeteServeur rs;
         while (true) {
         	line=stdIn.readLine();
-        	RequeteClient rc = new RequeteClient(line);
+        	rc = new RequeteClient(line);
         	if (line.equals(".")) break;
         	oos.writeObject(rc);
-        	System.out.println(socIn.readLine());
+        	try 
+        	{
+				rs = (RequeteServeur) ois.readObject();
+				switch (rs.type)
+				{
+				  	case 0 : // SIGNIN
+				  		System.out.println(rs.message);
+				  		break;
+				  	case 1 : // MESSAGE
+				  		System.out.println(rs.message);
+				  		break;
+				  	case 2 : // SIGNOUT
+				  		System.out.println(rs.message);
+				  		break;
+				  	default :
+				  		System.err.println(rs.message);
+				  		break;
+				}
+			}
+        	catch (ClassNotFoundException e)
+        	{
+				e.printStackTrace();
+			}
         }
-      socOut.close();
-      socIn.close();
+        
+
       stdIn.close();
       server.close();
     }

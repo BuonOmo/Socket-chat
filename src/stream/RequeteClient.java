@@ -2,18 +2,14 @@ package stream;
 
 import java.io.Serializable;
 
-public class RequeteClient implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public class RequeteClient implements Serializable {
 	
 	public String message;
 	public String username;
 	public String otherUsername;
+	public String errorMessage;
 	public int type;
-	public boolean valide = true;
 	
 	RequeteClient (String requete) {
 		
@@ -24,8 +20,7 @@ public class RequeteClient implements Serializable{
 				type = 0;
 				if (req[1].length() < 4)
 				{
-					System.err.println ("Identifiant inexistant ou trop court");
-					valide = false;
+					errorMessage = "Identifiant"+req[1]+"inexistant ou trop court";
 				}
 				else
 				{
@@ -42,15 +37,15 @@ public class RequeteClient implements Serializable{
 				}
 				else
 				{
-					System.err.println("Requete d'envoi non valide");
-					valide=false;
+					errorMessage = "Requete d'envoi de message non valide.";
 				}
 				break;
 			case ("QUIT") :
 				type=2;
 				break;
 			default :
-				valide=false;
+				type = 3;
+				errorMessage = "Requete mal formée.";
 				break;
 		} // Fin de switch
 	} // Fin du constructeur
