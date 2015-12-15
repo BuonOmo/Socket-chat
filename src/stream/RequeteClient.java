@@ -1,7 +1,14 @@
-package socket;
+package stream;
 
-public class RequeteClient {
+import java.io.Serializable;
 
+public class RequeteClient implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	public String message;
 	public String username;
 	public String otherUsername;
