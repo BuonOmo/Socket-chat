@@ -1,0 +1,4 @@
+javac stream/EchoClient.java
+javac stream/EchoServer.java
+java stream.EchoServer 888
+java stream.EchoClient 127.0.0.1 1091
