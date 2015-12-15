@@ -18,8 +18,6 @@ public class Server  {
   	**/
 	static void doService(Socket clientSocket) {
     	  try {
-    		String pseudo = "";
-    		boolean connected = true;
     		BufferedReader socIn = null;
     		ObjectInputStream ois = new ObjectInputStream (clientSocket.getInputStream());
     		
@@ -28,7 +26,14 @@ public class Server  {
     		PrintStream socOut = new PrintStream(clientSocket.getOutputStream());
     		while (true) {
     		  RequeteClient rc = (RequeteClient) ois.readObject();
-    		  socOut.println(rc.message);
+    		  if (rc.valide)
+    		  {
+    			  socOut.println("type: "+rc.type+"\nuser: "+rc.username+"\nmessage: "+rc.message+"\nother: "+rc.otherUsername);
+    		  }
+    		  else
+    		  {
+    			  socOut.println("non valide");
+    		  }
     		}
     	} catch (Exception e) {
         	System.err.println("Error in EchoServer:" + e); 

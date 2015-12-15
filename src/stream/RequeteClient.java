@@ -15,19 +15,21 @@ public class RequeteClient implements Serializable{
 	public int type;
 	public boolean valide = true;
 	
-	public RequeteClient (String requete) {
+	RequeteClient (String requete) {
 		
 		String req [] = requete.split(" ");
 		switch (req[0])
 		{
 			case ("CONNECT") :
-				if (requete.length() < "CONNECT abcd".length()){
+				type = 0;
+				if (req[1].length() < 4)
+				{
 					System.err.println ("Identifiant inexistant ou trop court");
 					valide = false;
 				}
-				else {
-					type = 0;
-					username = requete.substring("CONNECT ".length());
+				else
+				{
+					username = req[1];
 				}
 				break;
 				
@@ -44,11 +46,18 @@ public class RequeteClient implements Serializable{
 					valide=false;
 				}
 				break;
-				
+			case ("QUIT") :
+				type=2;
+				break;
 			default :
 				valide=false;
 				break;
-		}
-		
+		} // Fin de switch
+	} // Fin du constructeur
+	
+	RequeteClient(String requete, String aUser)
+	{
+		this(requete);
+		username = aUser;
 	}
 }
