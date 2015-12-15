@@ -4,13 +4,16 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class RequeteServeur implements Serializable {
+	
 	public int type;
+	String requete;
 	public String message;
 	public String user;
 	public String receiver;
 	
 	RequeteServeur(String requete)
 	{
+		this.requete = requete;
 		String req[] = requete.split(" ");
 		switch (req[0])
 		{
@@ -41,7 +44,8 @@ public class RequeteServeur implements Serializable {
 
 	public String toString ()
 	{
-		return "( type: "+type+" ; message: "+message+" ; user: "+user+" ; receiver: "+receiver+" )";
+		return requete;
+		//return "( type: "+type+" ; message: "+message+" ; user: "+user+" ; receiver: "+receiver+" )";
 	}
 	
 	public int toInt ()

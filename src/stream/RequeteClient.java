@@ -5,6 +5,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class RequeteClient implements Serializable {
 	
+	public String requete;
 	public String message;
 	public String user;
 	public String receiver;
@@ -12,7 +13,7 @@ public class RequeteClient implements Serializable {
 	public int type;
 	
 	RequeteClient (String requete) {
-		
+		this.requete = requete;
 		String req [] = requete.split(" ");
 		switch (req[0])
 		{
@@ -60,7 +61,8 @@ public class RequeteClient implements Serializable {
 	
 	public String toString ()
 	{
-		return "( type: "+type+" ; message: "+message+" ; user: "+user+" ; receiver: "+receiver+" ; errorMessage: "+errorMessage+" )";
+		return requete;
+		//return "( type: "+type+" ; message: "+message+" ; user: "+user+" ; receiver: "+receiver+" ; errorMessage: "+errorMessage+" )";
 	}
 	
 	public int toInt ()
