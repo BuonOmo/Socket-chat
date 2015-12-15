@@ -19,7 +19,9 @@ public class Client {
   *  accepts a connection, receives a message from client then sends an echo to the client
   **/
     public static void main(String[] args) throws IOException {
-
+    	
+    	String username = "NaN";
+    	boolean connected = false;
         Socket server = null;
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
@@ -50,7 +52,11 @@ public class Client {
         RequeteServeur rs;
         while (true) {
         	line=stdIn.readLine();
-        	rc = new RequeteClient(line);
+        	if (line.startsWith("CONNECT "))
+        	{
+        		username=line.substring("CONNECT ".length());
+        	}
+        	rc = new RequeteClient(line, username);
         	if (line.equals(".")) break;
         	oos.writeObject(rc);
         	try 
@@ -59,15 +65,29 @@ public class Client {
 				switch (rs.type)
 				{
 				  	case 0 : // SIGNIN
+				  		if (rs.user.equals(username))
+				  			connected = true;
 				  		System.out.println(rs.message);
 				  		break;
 				  	case 1 : // MESSAGE
-				  		System.out.println(rs.message);
+				  		if ( connected &&
+				  			 (	(rs.receiver.equals("all") && !rs.user.equals(username)) ||
+				  				 rs.receiver.equals(username)
+				  		     )
+				  		   )
+				  			System.out.println(rs.message);
 				  		break;
 				  	case 2 : // SIGNOUT
-				  		System.out.println(rs.message);
+				  		if (connected)
+				  		{
+				  			System.out.println(rs.message);
+				  			if (rs.user.equals(username))
+				  			{
+				  				connected = false;
+				  			}
+				  		}
 				  		break;
-				  	default :
+				  	default : // ERROR
 				  		System.err.println(rs.message);
 				  		break;
 				}

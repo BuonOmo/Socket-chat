@@ -18,12 +18,8 @@ public class Server  {
   	**/
 	static void doService(Socket clientSocket) {
     	  try {
-    		BufferedReader socIn = null;
     		ObjectInputStream ois = new ObjectInputStream (clientSocket.getInputStream());
     		ObjectOutputStream oos = new ObjectOutputStream (clientSocket.getOutputStream());
-    		socIn = new BufferedReader(
-    			new InputStreamReader(clientSocket.getInputStream()));    
-    		PrintStream socOut = new PrintStream(clientSocket.getOutputStream());
     		while (true) {
     		  RequeteClient rc = (RequeteClient) ois.readObject();
 			  String requete;
@@ -69,7 +65,7 @@ public class Server  {
 			doService(clientSocket);
 		}
         } catch (Exception e) {
-            System.err.println("Error in EchoServer:" + e);
+            System.err.println("Error in Server:" + e);
         }
       }
   }
