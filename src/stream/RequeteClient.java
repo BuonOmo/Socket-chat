@@ -6,8 +6,8 @@ import java.io.Serializable;
 public class RequeteClient implements Serializable {
 	
 	public String message;
-	public String username;
-	public String otherUsername;
+	public String user;
+	public String receiver;
 	public String errorMessage;
 	public int type;
 	
@@ -24,7 +24,7 @@ public class RequeteClient implements Serializable {
 				}
 				else
 				{
-					username = req[1];
+					user = req[1];
 				}
 				break;
 				
@@ -32,7 +32,7 @@ public class RequeteClient implements Serializable {
 				type=1;
 				if (req.length == 4 && req[2].equals("CONTENT")&&(req[1].equals("all") || req[1].length() > 3))
 				{
-					otherUsername = req[1];
+					receiver = req[1];
 					message = "";
 					for (int i = 3 ; i < req.length ; i++)
 						message+= req[i];
@@ -55,6 +55,16 @@ public class RequeteClient implements Serializable {
 	RequeteClient(String requete, String aUser)
 	{
 		this(requete);
-		username = aUser;
+		user = aUser;
+	}
+	
+	public String toString ()
+	{
+		return "( type: "+type+" ; message: "+message+" ; user: "+user+" ; receiver: "+receiver+" ; errorMessage: "+errorMessage+" )";
+	}
+	
+	public int toInt ()
+	{
+		return type;
 	}
 }

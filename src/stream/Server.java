@@ -20,25 +20,30 @@ public class Server  {
     	  try {
     		ObjectInputStream ois = new ObjectInputStream (clientSocket.getInputStream());
     		ObjectOutputStream oos = new ObjectOutputStream (clientSocket.getOutputStream());
+    		RequeteClient rc;
+    		RequeteServeur rs;
     		while (true) {
-    		  RequeteClient rc = (RequeteClient) ois.readObject();
+    		  rc = (RequeteClient) ois.readObject();
+			  System.out.println("Requete du client : "+rc);
 			  String requete;
 			  switch (rc.type)
 			  {
 			  	case 0 :
-			  		requete = "SIGNIN "+rc.username;
+			  		requete = "SIGNIN "+rc.user;
 			  		break;
 			  	case 1 :
-			  		requete = "MESSAGE FROM "+rc.username+" TO "+rc.otherUsername+" CONTENT "+rc.message;
+			  		requete = "MESSAGE FROM "+rc.user+" TO "+rc.receiver+" CONTENT "+rc.message;
 			  		break;
 			  	case 2 :
-			  		requete = "SIGNOUT "+rc.username;
+			  		requete = "SIGNOUT "+rc.user;
 			  		break;
 			  	default :
 			  		requete = "ERROR "+rc.errorMessage;
 			  		break;
 			  }
-			  oos.writeObject(new RequeteServeur(requete));
+			  rs = new RequeteServeur(requete);
+			  System.out.println("Réponse du serveur : "+rs);
+			  oos.writeObject(rs);
 		}
     	} catch (Exception e) {
         	System.err.println("Error in EchoServer:" + e); 

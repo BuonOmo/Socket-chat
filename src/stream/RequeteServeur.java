@@ -39,4 +39,13 @@ public class RequeteServeur implements Serializable {
 		}
 	}
 
+	public String toString ()
+	{
+		return "( type: "+type+" ; message: "+message+" ; user: "+user+" ; receiver: "+receiver+" )";
+	}
+	
+	public int toInt ()
+	{
+		return type;
+	}
 }
