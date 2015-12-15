@@ -33,7 +33,9 @@ public class RequeteClient implements Serializable {
 				if (req.length == 4 && req[2].equals("CONTENT")&&(req[1].equals("all") || req[1].length() > 3))
 				{
 					otherUsername = req[1];
-					message = req[3];
+					message = "";
+					for (int i = 3 ; i < req.length ; i++)
+						message+= req[i];
 				}
 				else
 				{

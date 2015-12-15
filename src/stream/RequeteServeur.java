@@ -23,7 +23,9 @@ public class RequeteServeur implements Serializable {
 				type = 1;
 				user = req[2];
 				receiver = req[4];
-				message = user+" > "+receiver+" : "+req[6];
+				message = user+" > "+receiver+" : ";
+				for (int i = 6 ; i < req.length ; i++)
+					message+= req[i];
 				break;
 			case ("SIGNOUT") :
 				type = 2;
