@@ -1,9 +1,9 @@
-package stream;
+package socket;
 
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class RequeteServeur implements Serializable {
+public class ServerRequest implements Serializable {
 	
 	public int type;
 	String requete;
@@ -11,7 +11,7 @@ public class RequeteServeur implements Serializable {
 	public String user;
 	public String receiver;
 	
-	RequeteServeur(String requete)
+	ServerRequest(String requete)
 	{
 		this.requete = requete;
 		String req[] = requete.split(" ");

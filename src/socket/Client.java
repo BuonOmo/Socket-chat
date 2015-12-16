@@ -4,7 +4,7 @@
  * Date: 10/01/04
  * Authors: ulysse
  */
-package stream;
+package socket;
 
 import java.io.*;
 import java.net.*;
@@ -48,20 +48,20 @@ public class Client {
         }
                              
         String line;
-        RequeteClient rc;
-        RequeteServeur rs;
+        ClientRequest rc;
+        ServerRequest rs;
         while (true) {
         	line=stdIn.readLine();
         	if (line.startsWith("CONNECT "))
         	{
         		username=line.substring("CONNECT ".length());
         	}
-        	rc = new RequeteClient(line, username);
+        	rc = new ClientRequest(line, username);
         	if (line.equals(".")) break;
         	oos.writeObject(rc);
         	try 
         	{
-				rs = (RequeteServeur) ois.readObject();
+				rs = (ServerRequest) ois.readObject();
 				switch (rs.type)
 				{
 				  	case 0 : // SIGNIN

@@ -5,7 +5,7 @@
  * Authors:
  */
 
-package stream;
+package socket;
 
 import java.io.*;
 import java.net.*;
@@ -20,10 +20,10 @@ public class Server  {
     	  try {
     		ObjectInputStream ois = new ObjectInputStream (clientSocket.getInputStream());
     		ObjectOutputStream oos = new ObjectOutputStream (clientSocket.getOutputStream());
-    		RequeteClient rc;
-    		RequeteServeur rs;
+    		ClientRequest rc;
+    		ServerRequest rs;
     		while (true) {
-    		  rc = (RequeteClient) ois.readObject();
+    		  rc = (ClientRequest) ois.readObject();
 			  System.out.println("Requete du client : "+rc);
 			  String requete;
 			  switch (rc.type)
@@ -41,7 +41,7 @@ public class Server  {
 			  		requete = "ERROR "+rc.errorMessage;
 			  		break;
 			  }
-			  rs = new RequeteServeur(requete);
+			  rs = new ServerRequest(requete);
 			  System.out.println("Réponse du serveur : "+rs);
 			  oos.writeObject(rs);
 		}

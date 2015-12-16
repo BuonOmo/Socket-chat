@@ -1,9 +1,9 @@
-package stream;
+package socket;
 
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class RequeteClient implements Serializable {
+public class ClientRequest implements Serializable {
 	
 	public String requete;
 	public String message;
@@ -12,7 +12,7 @@ public class RequeteClient implements Serializable {
 	public String errorMessage;
 	public int type;
 	
-	RequeteClient (String requete) {
+	ClientRequest (String requete) {
 		this.requete = requete;
 		String req [] = requete.split(" ");
 		switch (req[0])
@@ -53,7 +53,7 @@ public class RequeteClient implements Serializable {
 		} // Fin de switch
 	} // Fin du constructeur
 	
-	RequeteClient(String requete, String aUser)
+	ClientRequest(String requete, String aUser)
 	{
 		this(requete);
 		user = aUser;
