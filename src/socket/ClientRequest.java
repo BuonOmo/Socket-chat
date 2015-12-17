@@ -31,7 +31,7 @@ public class ClientRequest implements Serializable {
 				
 			case ("SENDTO") :
 				type=1;
-				if (req.length == 4 && req[2].equals("CONTENT")&&(req[1].equals("all") || req[1].length() > 3))
+				if (req.length >= 4 && req[2].equals("CONTENT")&&(req[1].equals("all") || req[1].length() > 3))
 				{
 					receiver = req[1];
 					message = "";

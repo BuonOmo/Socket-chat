@@ -9,14 +9,18 @@ package socket;
 
 import java.io.*;
 import java.net.*;
+import java.util.List;
 
 public class ClientThread
 	extends Thread {
 	
 	private Socket clientSocket;
+	public ObjectOutputStream oos;
+	public static List<ClientThread> allThreads;
 	
 	ClientThread(Socket s) {
 		this.clientSocket = s;
+		allThreads.add(this);
 	}
 
  	/**
@@ -26,7 +30,7 @@ public class ClientThread
 	public void run() {
     	  try {
       		ObjectInputStream ois = new ObjectInputStream (clientSocket.getInputStream());
-      		ObjectOutputStream oos = new ObjectOutputStream (clientSocket.getOutputStream());
+      		oos = new ObjectOutputStream (clientSocket.getOutputStream());
       		ClientRequest rc;
       		ServerRequest rs;
     		while (true) {
@@ -50,7 +54,11 @@ public class ClientThread
   			  }
   			  rs = new ServerRequest(requete);
   			  System.out.println("Réponse du serveur : "+rs);
-  			  oos.writeObject(rs);
+
+  			  for (ClientThread sub : allThreads)
+  			  {
+  				  sub.oos.writeObject(rs);
+  			  }
     		}
     	} catch (Exception e) {
         	System.err.println("Error in EchoServer:" + e); 

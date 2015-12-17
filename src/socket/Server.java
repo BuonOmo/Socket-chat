@@ -46,31 +46,36 @@ public class Server  {
 			  oos.writeObject(rs);
 		}
     	} catch (Exception e) {
-        	System.err.println("Error in EchoServer:" + e); 
+        	System.err.println("Error in EchoServer:" + e);
         }
        }
-	
+
  	/**
   	* main method
 	* @param EchoServer port
-  	* 
+  	*
   	**/
-       public static void main(String args[]){ 
-        ServerSocket listenSocket;
-        
-  	if (args.length != 1) {
-          System.out.println("Usage: java EchoServer <EchoServer port>");
-          System.exit(1);
-  	}
-	try {
-		listenSocket = new ServerSocket(Integer.parseInt(args[0])); //port
-		while (true) {
-			Socket clientSocket = listenSocket.accept();
-			System.out.println("connexion from:" + clientSocket.getInetAddress());
-			doService(clientSocket);
+	public static void main(String args[]){
+		ServerSocket listenSocket;
+		
+		if (args.length != 1) {
+		      System.out.println("Usage: java EchoServer <EchoServer port>");
+		      System.exit(1);
 		}
-        } catch (Exception e) {
-            System.err.println("Error in Server:" + e);
-        }
-      }
-  }
+		try
+		{
+			listenSocket = new ServerSocket(Integer.parseInt(args[0])); //port
+			while (true)
+			{
+				Socket clientSocket = listenSocket.accept();
+				System.out.println("connexion from:" + clientSocket.getInetAddress());
+				ClientThread ct = new ClientThread(clientSocket);
+				ct.start();
+			}
+		}
+		catch (Exception e)
+		{
+		    System.err.println("Error in Server:" + e);
+		}
+	}
+}
