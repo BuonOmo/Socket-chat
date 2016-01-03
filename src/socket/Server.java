@@ -9,17 +9,18 @@ package socket;
 
 import java.io.*;
 import java.net.*;
+import java.util.Map;
 
 public class Server  {
-
+	public static Map<String, Socket> allSockets;
  	/**
   	* receives a request from client then sends an echo to the client
   	* @param clientSocket the client socket
   	**/
-	static void doService(Socket clientSocket) {
+	static void doService(ClientThread t) {
     	  try {
-    		ObjectInputStream ois = new ObjectInputStream (clientSocket.getInputStream());
-    		ObjectOutputStream oos = new ObjectOutputStream (clientSocket.getOutputStream());
+    		ObjectInputStream ois = new ObjectInputStream (t.clientSocket.getInputStream());
+    		ObjectOutputStream oos = new ObjectOutputStream (t.clientSocket.getOutputStream());
     		ClientRequest rc;
     		ServerRequest rs;
     		while (true) {
@@ -29,13 +30,25 @@ public class Server  {
 			  switch (rc.type)
 			  {
 			  	case 0 :
-			  		requete = "SIGNIN "+rc.user;
+			  		if (!allSockets.containsKey(rc.user))
+			  		{
+			  			allSockets.put(rc.user, t.clientSocket);
+			  			requete = "SIGNIN "+rc.user;
+			  			t.connect();
+			  		}
+			  		else
+			  		{
+			  			requete = "ERROR Utilisateur déjà existant, veuillez choisir un autre pseudo";
+			  			
+			  		}
 			  		break;
 			  	case 1 :
 			  		requete = "MESSAGE FROM "+rc.user+" TO "+rc.receiver+" CONTENT "+rc.message;
 			  		break;
 			  	case 2 :
 			  		requete = "SIGNOUT "+rc.user;
+			  		t.disconnect();
+			  		allSockets.remove(rc.user);
 			  		break;
 			  	default :
 			  		requete = "ERROR "+rc.errorMessage;
@@ -43,7 +56,20 @@ public class Server  {
 			  }
 			  rs = new ServerRequest(requete);
 			  System.out.println("Réponse du serveur : "+rs);
-			  oos.writeObject(rs);
+			  switch (rc.receiver)
+			  {
+			  	case "all" :
+			  		for (Socket s : allSockets.values()) {
+			  			oos = new ObjectOutputStream(s.getOutputStream());
+			  			oos.writeObject(rs);
+			  		}
+			  	case "" :
+		  			oos = new ObjectOutputStream(t.clientSocket.getOutputStream());
+		  			oos.writeObject(rs);
+			  	default :
+		  			oos = new ObjectOutputStream(allSockets.get(rs.receiver).getOutputStream());
+		  			oos.writeObject(rs);	
+			  }
 		}
     	} catch (Exception e) {
         	System.err.println("Error in EchoServer:" + e);

@@ -5,11 +5,11 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ClientRequest implements Serializable {
 	
-	public String requete;
-	public String message;
-	public String user;
-	public String receiver;
-	public String errorMessage;
+	public String requete = "";
+	public String message = "";
+	public String user = "";
+	public String receiver = "";
+	public String errorMessage = "";
 	public int type;
 	
 	ClientRequest (String requete) {
